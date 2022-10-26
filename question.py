@@ -32,29 +32,27 @@ headersGK = {}
 GK = requests.request("GET", urlGK, headers=headersGK, data=payloadGK)
 
 
-ind = input("What category are you in?\n1) Natural Science\n2} Video Games\n3) History and Geography\n4) General Knowledge\n")
-match ind:
-    case "1":
-        category = NS
-    case "2":
-        category = VG 
-    case "3":
-        horg = random.randint(0,1)
-        match horg:
-            case 0:
-                category = H
-            case 1:
-                category = G
-    case "4":
-        category = GK
+def createList(r1, r2):
+    return list(range(r1, r2+1))
 
-def getQuestion(category):
-    questionNum = random.randint(0, len(category.json()["results"])-1)
+available_questions = {"NS": createList(0,49), "VG": createList(0,49), "G": createList(0,24), "H": createList(0,24), "GK": createList(0,49)}
+
+
+def getQuestion(category, category_name):
+    questionNum = random.choice(available_questions[category_name])
     question = category.json()["results"][questionNum]["question"]
     correct_string = category.json()["results"][questionNum]["correct_answer"]
     options = category.json()["results"][questionNum]["incorrect_answers"]
     correct_answer_index = random.randint(0,3)
     options.insert(correct_answer_index, correct_string)
+    for i in range(4):
+        options[i] = options[i].replace("&#039;", "\'")
+        options[i] = options[i].replace("&amp;", "&")
+    question.replace("&#039;", "\'")
+    question.replace("&amp;", "&")
+    print("\n")
+    print(question)
+    print(options)
     player_answer = input("Type A,B,C,D for your corresponding answer\n")
     player_answer = player_answer.lower()
     match player_answer:
@@ -66,12 +64,42 @@ def getQuestion(category):
             player_answer_index = 2
         case "d":
             player_answer_index = 3
+    print("\n")     
     if player_answer_index == correct_answer_index:
-        print("Correct")
+        print("    ****Correct****    ")
     else:
-        print("Incorrect")
+        print("    ****Incorrect****    ")
         print("Correct Answer: " + correct_string)
+    print("\n")
+    available_questions[category_name].remove(questionNum)
+    
+
+game = True
+
+while game:
+    ind = input("What category are you in?\n1) Natural Science\n2} Video Games\n3) History and Geography\n4) General Knowledge\n")
+    match ind:
+        case "1":
+            category = NS
+            category_name = "NS"
+        case "2":
+            category = VG 
+            category_name = "VG"
+        case "3":
+            horg = random.randint(0,1)
+            match horg:
+                case 0:
+                    category = H
+                    category_name = "H"
+                case 1:
+                    category = G
+                    category_name = "G"
+        case "4":
+            category = GK
+            category_name = "GK"
+            
+    getQuestion(category, category_name)
 
 
 
-getQuestion(category)
+
