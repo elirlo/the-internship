@@ -1,6 +1,7 @@
-from ctypes.wintypes import HGDIOBJ
-from sys import UnraisableHookArgs
-from telnetlib import VT3270REGIME
+# from ctypes.wintypes import HGDIOBJ
+# from sys import UnraisableHookArgs
+# from telnetlib import VT3270REGIME
+from termios import NL1
 import requests
 import random
 
@@ -28,34 +29,49 @@ H = requests.request("GET", urlH, headers=headersH, data=payloadH)
 urlGK = "https://opentdb.com/api.php?amount=50&category=9&difficulty=hard&type=multiple"
 payloadGK ={}
 headersGK = {}
-GK = requests.request("GET", urlGK, headers3=headersGK, data=payloadGK)
+GK = requests.request("GET", urlGK, headers=headersGK, data=payloadGK)
 
-numQuestions = {"NS" : 49, "VG" : 49,"G": 24,"H": 24,"GK": 49}
 
-ind = input("What category are you in?\n1) Natural Science\n2} Video Games\n3) History and Geography\n4) General Knowledge")
+ind = input("What category are you in?\n1) Natural Science\n2} Video Games\n3) History and Geography\n4) General Knowledge\n")
 match ind:
-    case 1:
+    case "1":
         category = NS
-    case 2:
+    case "2":
         category = VG 
-    case 3:
+    case "3":
         horg = random.randint(0,1)
         match horg:
             case 0:
                 category = H
             case 1:
                 category = G
-    case 4:
+    case "4":
         category = GK
 
-def getQuestion(category, numQuestions):
-    questionNum = random.randint(0,numQuestions)
+def getQuestion(category):
+    questionNum = random.randint(0, len(category.json()["results"])-1)
     question = category.json()["results"][questionNum]["question"]
-    correct = category.json()["results"][questionNum]["correct_answer"]
+    correct_string = category.json()["results"][questionNum]["correct_answer"]
     options = category.json()["results"][questionNum]["incorrect_answers"]
-    ind = random.randint(0,4)
-    options.insert(ind, correct)
-    print(question)
-    print(options)
+    correct_answer_index = random.randint(0,3)
+    options.insert(correct_answer_index, correct_string)
+    player_answer = input("Type A,B,C,D for your corresponding answer\n")
+    player_answer = player_answer.lower()
+    match player_answer:
+        case "a":
+            player_answer_index = 0
+        case "b":
+            player_answer_index = 1
+        case "c":
+            player_answer_index = 2
+        case "d":
+            player_answer_index = 3
+    if player_answer_index == correct_answer_index:
+        print("Correct")
+    else:
+        print("Incorrect")
+        print("Correct Answer: " + correct_string)
 
-getQuestion()
+
+
+getQuestion(category)
