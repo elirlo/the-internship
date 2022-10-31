@@ -1,5 +1,6 @@
 import requests
 import random
+import html
 
 urlNS = (
     "https://opentdb.com/api.php?amount=50&category=17&difficulty=medium&type=multiple"
@@ -47,16 +48,19 @@ def getQuestion(category, category_name):
     options = category.json()["results"][questionNum]["incorrect_answers"]
     correct_answer_index = random.randint(0, 3)
     options.insert(correct_answer_index, correct_string)
+
     for i in range(4):
-        options[i] = options[i].replace("&#039;", "'")
-        options[i] = options[i].replace("&amp;", "&")
-    question.replace("&#039;", "'")
-    question.replace("&amp;", "&")
+        options[i] = html.unescape(options[i])
+
+    question = html.unescape(question)
+
     print("\n")
     print(question)
     print(options)
+
     player_answer = input("Type A,B,C,D for your corresponding answer\n")
     player_answer = player_answer.lower()
+
     match player_answer:
         case "a":
             player_answer_index = 0
@@ -66,13 +70,17 @@ def getQuestion(category, category_name):
             player_answer_index = 2
         case "d":
             player_answer_index = 3
+
     print("\n")
+
     if player_answer_index == correct_answer_index:
         print("    ****Correct****    ")
     else:
         print("    ****Incorrect****    ")
         print("Correct Answer: " + correct_string)
+
     print("\n")
+
     available_questions[category_name].remove(questionNum)
 
 
