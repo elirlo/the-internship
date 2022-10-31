@@ -1,7 +1,3 @@
-# from ctypes.wintypes import HGDIOBJ
-# from sys import UnraisableHookArgs
-# from telnetlib import VT3270REGIME
-from termios import NL1
 import requests
 import random
 
