@@ -8,11 +8,22 @@ urlNS = (
 
 NS = requests.get(urlNS)
 
+urlNSE = (
+   "https://opentdb.com/api.php?amount=20&category=17&difficulty=easy&type=multiple"
+)
+NSE = requests.get(urlNSE)
+
 
 urlVG = (
     "https://opentdb.com/api.php?amount=50&category=15&difficulty=medium&type=multiple"
 )
 VG = requests.get(urlVG)
+
+urlTV = (
+    "https://opentdb.com/api.php?amount=50&category=14&difficulty=easy&type=multiple"
+)
+TV = requests.get(urlTV)
+
 
 urlG = (
     "https://opentdb.com/api.php?amount=25&category=22&difficulty=medium&type=multiple"
@@ -24,8 +35,16 @@ urlH = (
 )
 H = requests.get(urlH)
 
+urlHE = (
+    "https://opentdb.com/api.php?amount=50&category=23&difficulty=easy&type=multiple"
+)
+HE = requests.get(urlHE)
+
 urlGK = "https://opentdb.com/api.php?amount=50&category=9&difficulty=hard&type=multiple"
 GK = requests.get(urlGK)
+
+urlGKE = "https://opentdb.com/api.php?amount=50&category=9&difficulty=easy&type=multiple"
+GKE = requests.get(urlGKE)
 
 
 def createList(r1, r2):
@@ -33,15 +52,25 @@ def createList(r1, r2):
 
 
 available_questions = {
-    "NS": createList(0, 49),
-    "VG": createList(0, 49),
-    "G": createList(0, 24),
-    "H": createList(0, 24),
-    "GK": createList(0, 49),
+    "NS": createList(0, 49), #50 natural science questions on medium difficulty
+    "NSE": createList(0,19), #20 
+    "VG": createList(0, 49), #50 video game questions on medium pools with TV
+    "TV": createList(0,49), #50 TV questions on TV pools with vg
+    "G": createList(0, 24), #25 geography questions pools with H, he
+    "H": createList(0, 24), #25 History questions pools with g, he
+    "HE": createList(0,49), #50 History questions on easy pools with h, g
+    "GK": createList(0, 49),#50 gen knowledge pools with gke
+    "GKE": createList(0,49) #50 gen knowledge easy pools with gk
 }
 
 
+def cleanUnicode(question, options)
+    for i in range(4):
+        options[i] = html.unescape(options[i])
+    question = html.unescape(question)
+
 def getQuestion(category, category_name):
+    
     questionNum = random.choice(available_questions[category_name])
     question = category.json()["results"][questionNum]["question"]
     correct_string = category.json()["results"][questionNum]["correct_answer"]
@@ -70,6 +99,14 @@ def getQuestion(category, category_name):
             player_answer_index = 2
         case "d":
             player_answer_index = 3
+        case "1":
+            player_answer_index = 0
+        case "2":
+            player_answer_index = 1
+        case "3":
+            player_answer_index = 2
+        case "4":
+            player_answer_index = 3
 
     print("\n")
 
@@ -84,21 +121,33 @@ def getQuestion(category, category_name):
     available_questions[category_name].remove(questionNum)
 
 
+
 game = True
 
 while game:
     ind = input(
-        "What category are you in?\n1) Natural Science\n2} Video Games\n3) History and Geography\n4) General Knowledge\n"
+        "What category are you in?\n1) Natural Science\n2) Entertainment\n3) History and Geography\n4) General Knowledge\n"
     )
+    horg = random.randint(0, 1)
     match ind:
         case "1":
-            category = NS
-            category_name = "NS"
+            match horg:
+                case 0:
+                    category = NS
+                    category_name = "NS"
+                case 1:
+                    category = NSE
+                    category_name = "NSE"
         case "2":
-            category = VG
-            category_name = "VG"
+            match horg:
+                case 0:
+                    category = VG
+                    category_name = "VG"
+                case 1:
+                    category = TV
+                    category_name = "TV"
         case "3":
-            horg = random.randint(0, 1)
+            horg = random.randint(0, 2)
             match horg:
                 case 0:
                     category = H
@@ -106,8 +155,16 @@ while game:
                 case 1:
                     category = G
                     category_name = "G"
+                case 2:
+                    category = HE
+                    category_name = "HE"
         case "4":
-            category = GK
-            category_name = "GK"
+            match horg:
+                case 0:
+                    category = GK
+                    category_name = "GK"
+                case 1:
+                    category = GKE
+                    category_name = "GKE"
 
     getQuestion(category, category_name)
