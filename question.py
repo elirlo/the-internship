@@ -81,16 +81,7 @@ def getQuestion(category, category_name):
     for i in range(4):
         options[i] = html.unescape(options[i])
 
-    question = html.unescape(question)
 
-    print("\n")
-    print(question)
-    print(options)
-
-    player_answer = input("Type A,B,C,D for your corresponding answer\n")
-    player_answer = player_answer.lower()
-
-    match player_answer:
         case "a":
             player_answer_index = 0
         case "b":
