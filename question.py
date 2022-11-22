@@ -202,5 +202,4 @@ while game:
                     categorylen = len(available_questions[category_name])
             case other:
                 ind = input("Invalid input. What category are you in?\n1) Natural Science\n2) Entertainment\n3) History and Geography\n4) General Knowledge\n")
-    print(category_name, len(available_questions[category_name]))
     getQuestion(category, category_name)
