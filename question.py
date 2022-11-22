@@ -133,46 +133,74 @@ while game:
     )
     category = None
     category_name = None
-    horg = random.randint(0, 1)
+    categorylen = 0
     while category == None and category_name == None:
         match ind:
             case "1":
-                match horg:
-                    case 0:
-                        category = NS
-                        category_name = "NS"
-                    case 1:
-                        category = NSE
-                        category_name = "NSE"
+                if len(available_questions["NS"]) == 0 and len(available_questions["NSE"]) == 0:
+                    print("No more unique Natural Science Questions. Questions will be repeated now")
+                    available_questions["NS"] = createList(0,49)
+                    available_questions["NSE"] = createList(0,19)
+                while categorylen == 0:
+                    horg = random.randint(0, 1)
+                    match horg:
+                        case 0:
+                            category = NS
+                            category_name = "NS"
+                        case 1:
+                            category = NSE
+                            category_name = "NSE"
+                    categorylen = len(available_questions[category_name])
             case "2":
-                match horg:
-                    case 0:
-                        category = VG
-                        category_name = "VG"
-                    case 1:
-                        category = TV
-                        category_name = "TV"
+                if len(available_questions["VG"]) == 0 and len(available_questions["TV"]) == 0:
+                    print("No more unique Entertainment Questions. Questions will be repeated now")
+                    available_questions["VG"] = createList(0,49)
+                    available_questions["TV"] = createList(0,49)
+                while categorylen == 0:
+                    horg = random.randint(0, 1)
+                    match horg:
+                        case 0:
+                            category = VG
+                            category_name = "VG"
+                        case 1:
+                            category = TV
+                            category_name = "TV"
+                    categorylen = len(available_questions[category_name])
             case "3":
-                horg = random.randint(0, 2)
-                match horg:
-                    case 0:
-                        category = H
-                        category_name = "H"
-                    case 1:
-                        category = G
-                        category_name = "G"
-                    case 2:
-                        category = HE
-                        category_name = "HE"
+                if len(available_questions["H"]) == 0 and len(available_questions["G"]) == 0 and len(available_questions["HE"]) == 0:
+                    print("No more unique History and Geography Questions. Questions will be repeated now")
+                    available_questions["H"] = createList(0,24)
+                    available_questions["G"] = createList(0,24)
+                    available_questions["HE"] = createList(0,49)
+                while categorylen == 0:
+                    horg = random.randint(0, 2)
+                    match horg:
+                        case 0:
+                            category = H
+                            category_name = "H"
+                        case 1:
+                            category = G
+                            category_name = "G"
+                        case 2:
+                            category = HE
+                            category_name = "HE"
+                    categorylen = len(available_questions[category_name])
             case "4":
-                match horg:
-                    case 0:
-                        category = GK
-                        category_name = "GK"
-                    case 1:
-                        category = GKE
-                        category_name = "GKE"
+                if len(available_questions["GK"]) == 0 and len(available_questions["GKE"]) == 0:
+                    print("No more unique General Knowledge Questions. Questions will be repeated now")
+                    available_questions["GK"] = createList(0,49)
+                    available_questions["GKE"] = createList(0,49)
+                while categorylen == 0:
+                    horg = random.randint(0, 1)
+                    match horg:
+                        case 0:
+                            category = GK
+                            category_name = "GK"
+                        case 1:
+                            category = GKE
+                            category_name = "GKE"
+                    categorylen = len(available_questions[category_name])
             case other:
                 ind = input("Invalid input. What category are you in?\n1) Natural Science\n2) Entertainment\n3) History and Geography\n4) General Knowledge\n")
-
+    print(category_name, len(available_questions[category_name]))
     getQuestion(category, category_name)
