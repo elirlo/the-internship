@@ -1,3 +1,5 @@
+# Created by: Sony Jain, Eli Lo, Aashish Subramanian
+# The Internship - GSD101
 import requests
 import random
 import html
